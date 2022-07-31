@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.history
+.vscode
+.env
+yarn-error.log
+*.swp
