@@ -5,7 +5,7 @@ export type Constructor<T = {}> = new (...args: any[]) => T;
 
 export function plainToClassWithValidate<T, V>(classType: Constructor<T>, data: V): T {
   const c = ptc(classType, data);
-  const errors = validateSync(c, { forbidUnknownValues: true });
+  const errors = validateSync(<any>c, { forbidUnknownValues: true });
   if (errors.length > 0) throw new Error(JSON.stringify(errors.map((e) => e.toString())));
   return c;
 }
