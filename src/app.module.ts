@@ -4,7 +4,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
 
-import { AuthModule } from './common/auth/auth.module';
 import { DateScalar } from './common/scalars/date.scalar';
 import { AppResolver } from './resolvers/app.resolver';
 import { OrdersResolverModule } from './resolvers/orders/orders.resolver.module';
@@ -21,7 +20,6 @@ import { WechatResolverModule } from './resolvers/wechat/wechat.resolver.module'
       context: ({ req }) => ({ req }),
     }),
     LoggerModule.forRoot(),
-    AuthModule,
     OrdersResolverModule,
     WechatResolverModule,
   ],

@@ -5,3 +5,7 @@
 type Query {
   health: String!
 }
+
+type Mutation {
+  createMenu(menu: String!): String!
+}

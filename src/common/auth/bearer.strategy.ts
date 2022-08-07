@@ -1,22 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-http-bearer';
+
+import { config } from '../../config';
 import { UnauthorizedException } from '../exceptions';
-import { AuthService } from './auth.service';
 
 @Injectable()
 export class BearerStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor() {
     super();
   }
 
-  async validate(token: string) {
-    const tokenPayload = await this.authService.verifyToken(token);
-
-    if (!tokenPayload) {
+  async validate(apiKey: string) {
+    if (apiKey !== config.apiKey) {
       throw new UnauthorizedException();
     }
 
-    return { ...tokenPayload, token };
+    return;
   }
 }
