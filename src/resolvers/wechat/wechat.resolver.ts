@@ -35,6 +35,7 @@ export class WechatResolver {
       default:
         this.logger.log(`Unsupported MsgType ${xml.MsgType}`);
     }
+    return '';
   }
 
   @Mutation((returns) => String)
