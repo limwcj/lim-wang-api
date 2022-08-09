@@ -45,7 +45,7 @@ export class WechatController {
       } else {
         const places: SearchPlaceResult[] = JSON.parse(cache);
         const place = places[Math.floor(Math.random() * places.length)];
-        result = `吃一顿少一顿，这顿就吃这个吧：${this.resolvePlaceContent(place)}`;
+        result = `吃一顿少一顿，这顿就吃这个吧：${this.resolvePlaceContent(place)}\n☞ 餐厅地址：${place.address}`;
       }
     } else {
       result = DEFAULT_MSG[Math.floor(Math.random() * DEFAULT_MSG.length)];
