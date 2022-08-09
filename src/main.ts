@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import express from 'express';
+import bodyParser from 'body-parser';
 import xmlparser from 'express-xml-bodyparser';
 import { Logger as PinoLogger } from 'nestjs-pino';
 
@@ -15,8 +15,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableCors();
   app.useLogger(app.get(PinoLogger));
-  app.use(express.json());
-  app.use(express.urlencoded());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
   xmlparser.regexp = /^text\/xml$/i;
   app.use(xmlparser({ explicitArray: false, normalize: false, normalizeTags: false, trim: true }));
 

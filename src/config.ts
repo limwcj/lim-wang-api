@@ -13,4 +13,9 @@ export const config = {
     port: Number(process.env.REDIS_PORT),
     password: process.env.REDIS_PASSWORD,
   },
+  baiduMap: {
+    ak: process.env.BAIDU_MAP_AK,
+    apiEndpoint: process.env.BAIDU_MAP_ENDPOINT,
+  },
+  placeExpireTime: 60 * 30,
 };

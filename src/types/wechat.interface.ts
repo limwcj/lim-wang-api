@@ -8,14 +8,14 @@ export enum WechaMsgTypes {
 }
 
 export interface WechatMsg {
-  MsgType: string;
+  MsgType: WechaMsgTypes;
   FromUserName: string;
   ToUserName: string;
   CreateTime: number;
 }
 
 export interface WechatCommonMsg extends WechatMsg {
-  MsgId: string;
+  MsgId?: string;
   MsgDataId?: string;
   Idx?: string;
 }
@@ -50,4 +50,11 @@ export interface WechatEventMsg extends WechatMsg {
 export interface WechatAccessTokenPayload {
   access_token: string;
   expires_in: number;
+}
+
+export interface WechatSignature {
+  signature: string;
+  timestamp: string;
+  nonce: string;
+  echostr?: string;
 }

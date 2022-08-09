@@ -2,8 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppResolver {
+  constructor() {}
+
   @Get()
-  rootPath(): string {
+  async rootPath() {
     return 'SUCCESS';
   }
 }

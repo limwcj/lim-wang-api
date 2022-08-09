@@ -41,13 +41,4 @@ export class WechatService {
     await this.redisClient.instance.set(WECHAT_ACCESS_TOKEN_KEY, JSON.stringify(result), 'EX', result.expires_in);
     return result.access_token;
   }
-
-  async createMenu(menu: any, access_token: string) {
-    await this.requestWechatApi({
-      method: 'post',
-      url: '/menu/create',
-      params: { access_token },
-      data: menu,
-    });
-  }
 }
