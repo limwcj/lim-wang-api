@@ -47,15 +47,14 @@ export class WechatController {
         extension_analys_level: '1',
       });
       geoCoding = geoCodingResult.result;
-      console.log(geoCoding);
     } catch (e) {}
 
     if (geoCoding) {
       if (geoCoding.precise) {
         const location = await this.handleLocation({
           ...msg,
-          Location_X: geoCoding.location.lng,
-          Location_Y: geoCoding.location.lat,
+          Location_X: geoCoding.location.lat,
+          Location_Y: geoCoding.location.lng,
         });
         result = location.Content;
       } else {
