@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom, map } from 'rxjs';
 
-import { SearchPlaceInput, SearchPlaceOutput } from '../../types/baidu-map.interface';
+import { GetGeoCodingInput, GetGeoCodingOutput, SearchPlaceInput, SearchPlaceOutput } from '../../types/baidu-map.interface';
 
 @Injectable()
 export class BaiduMapService {
@@ -24,5 +24,9 @@ export class BaiduMapService {
 
   searchPlace(params: SearchPlaceInput): Promise<SearchPlaceOutput> {
     return this.requestBaiduMapApi({ url: '/place/v2/search', method: 'get', params });
+  }
+
+  getGeoCoding(params: GetGeoCodingInput): Promise<GetGeoCodingOutput> {
+    return this.requestBaiduMapApi({ url: '/geocoding/v3/', method: 'get', params });
   }
 }

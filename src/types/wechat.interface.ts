@@ -31,8 +31,8 @@ export interface WechatImageMsg extends WechatCommonMsg {
 export interface WechatLocationMsg extends WechatCommonMsg {
   Location_X: number;
   Location_Y: number;
-  Scale: number;
-  Label: string;
+  Scale?: number;
+  Label?: string;
 }
 
 export enum WechatEventType {

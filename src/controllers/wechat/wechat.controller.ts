@@ -7,7 +7,7 @@ import { config } from '../../config';
 import { AUTO_MSG, DEFAULT_MSG, LRU_SUFFIX, MsgActions, SUBSCRIBE_TEXT } from '../../constants';
 import { BaiduMapService } from '../../services/baidu-map/baidu-map.service';
 import { WechatService } from '../../services/wechat/wechat.service';
-import { SearchPlaceResult } from '../../types/baidu-map.interface';
+import { GetGeoCodingResult, SearchPlaceResult } from '../../types/baidu-map.interface';
 import { WechatEventMsg, WechatEventType, WechatLocationMsg, WechatTextMsg } from '../../types/wechat.interface';
 
 @Injectable()
@@ -37,11 +37,34 @@ export class WechatController {
   async handleText(msg: WechatTextMsg): Promise<{ Content: string }> {
     const { FromUserName, Content } = msg;
     let result = Content;
+    let geoCoding: GetGeoCodingResult;
 
-    if (AUTO_MSG[MsgActions.WHAT_TO_EAT].includes(msg.Content)) {
+    try {
+      const geoCodingResult = await this.baiduMapService.getGeoCoding({
+        address: Content,
+        output: 'json',
+        ak: config.baiduMap.ak,
+        extension_analys_level: '1',
+      });
+      geoCoding = geoCodingResult.result;
+      console.log(geoCoding);
+    } catch (e) {}
+
+    if (geoCoding) {
+      if (geoCoding.precise) {
+        const location = await this.handleLocation({
+          ...msg,
+          Location_X: geoCoding.location.lng,
+          Location_Y: geoCoding.location.lat,
+        });
+        result = location.Content;
+      } else {
+        result = '请输入详细的地址或直接发送定位🌏';
+      }
+    } else if (AUTO_MSG[MsgActions.WHAT_TO_EAT].includes(Content)) {
       let cache = await this.redisClient.instance.get(`WECHAT:${FromUserName}:${LRU_SUFFIX.PLACE}`);
       if (!cache) {
-        result = '请先上报地理位置🌏';
+        result = '请先发送定位或上报地理位置🌏';
       } else {
         const places: SearchPlaceResult[] = JSON.parse(cache);
         const place = places[Math.floor(Math.random() * places.length)];
