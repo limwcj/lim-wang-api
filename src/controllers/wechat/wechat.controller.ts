@@ -39,6 +39,18 @@ export class WechatController {
     let result = Content;
     let geoCoding: GetGeoCodingResult;
 
+    if (AUTO_MSG[MsgActions.WHAT_TO_EAT].includes(Content)) {
+      let cache = await this.redisClient.instance.get(`WECHAT:${FromUserName}:${LRU_SUFFIX.PLACE}`);
+      if (!cache) {
+        result = '请先发送定位或上报地理位置🌏';
+      } else {
+        const places: SearchPlaceResult[] = JSON.parse(cache);
+        const place = places[Math.floor(Math.random() * places.length)];
+        result = `吃一顿少一顿，这顿就吃这个吧：${this.resolvePlaceContent(place)}\n☞ 餐厅地址：${place.address}`;
+      }
+      return { Content: result };
+    }
+
     try {
       const geoCodingResult = await this.baiduMapService.getGeoCoding({
         address: Content,
@@ -59,15 +71,6 @@ export class WechatController {
         result = location.Content;
       } else {
         result = '请输入详细的地址或直接发送定位🌏';
-      }
-    } else if (AUTO_MSG[MsgActions.WHAT_TO_EAT].includes(Content)) {
-      let cache = await this.redisClient.instance.get(`WECHAT:${FromUserName}:${LRU_SUFFIX.PLACE}`);
-      if (!cache) {
-        result = '请先发送定位或上报地理位置🌏';
-      } else {
-        const places: SearchPlaceResult[] = JSON.parse(cache);
-        const place = places[Math.floor(Math.random() * places.length)];
-        result = `吃一顿少一顿，这顿就吃这个吧：${this.resolvePlaceContent(place)}\n☞ 餐厅地址：${place.address}`;
       }
     } else {
       result = DEFAULT_MSG[Math.floor(Math.random() * DEFAULT_MSG.length)];
